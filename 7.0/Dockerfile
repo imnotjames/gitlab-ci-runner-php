@@ -15,7 +15,7 @@ RUN locale-gen en_US.UTF-8
 
 # Update the installation
 RUN apt-get update
-RUN apt-get upgrade
+RUN apt-get upgrade -y
 
 # PHP Installation
 RUN apt-get remove -y --purge php5 php5-common
