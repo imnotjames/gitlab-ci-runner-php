@@ -38,6 +38,7 @@ RUN apt-get install -y \
 		php7.0-tokenizer \
 		php7.0-imap \
 		php-msgpack \
+		php-xdebug \
 		php7.0-gd
 
 # Install composer
