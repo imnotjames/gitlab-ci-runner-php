@@ -1,0 +1,75 @@
+FROM ubuntu:17.04
+
+MAINTAINER James Ward <james@notjam.es>
+
+ENV HOME "/root"
+ENV PATH "~/.yarn/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+ENV COMPOSER_HOME /root/composer
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Update the installation
+RUN apt-get update
+RUN apt-get upgrade -y
+
+# Set the Locale
+ENV LANG       en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
+RUN apt-get install -y locales
+RUN locale-gen en_US.UTF-8
+
+# Add ondrej/php PPA
+RUN apt-get install -y software-properties-common
+RUN add-apt-repository -y ppa:ondrej/php
+
+# PHP Installation
+RUN apt-get remove -y --purge php5 php5-common
+
+RUN apt-get install -y \
+		php7.1-common \
+		php7.1-cli \
+		php7.1-fpm \
+		php7.1-dev \
+		php7.1-opcache \
+		php7.1-pgsql \
+		php7.1-readline \
+		php7.1-mcrypt \
+		php7.1-zip \
+		php7.1-xml \
+		php7.1-mbstring \
+		php7.1-curl \
+		php7.1-json \
+		php7.1-sqlite3 \
+		php7.1-tokenizer \
+		php7.1-imap \
+		php-msgpack \
+		php-xdebug \
+		php7.1-gd
+
+RUN apt-get install build-essential php-pear php7.1-dev
+
+# Install other PHP extensions
+RUN apt-get install -y libzookeeper-mt2 libzookeeper-mt-dev
+RUN pecl install zookeeper-0.4.0
+RUN echo "extension=zookeeper.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
+
+RUN apt-get install -y libssl-dev pkg-config
+RUN pecl install mongodb-1.2.9
+RUN echo "extension=mongodb.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
+
+# Install composer
+VOLUME /root/composer
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+RUN composer selfupdate
+RUN composer global require hirak/prestissimo --prefer-dist --no-interaction
+
+# NodeJS installation
+RUN curl -sL https://deb.nodesource.com/setup_7.x | bash -
+RUN apt-get install -y nodejs
+
+RUN npm install -g gulp
+RUN npm install -g grunt
+
+# YARN
+RUN curl -o- -L https://yarnpkg.com/install.sh | bash
