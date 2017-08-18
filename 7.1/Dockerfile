@@ -21,6 +21,7 @@ RUN locale-gen en_US.UTF-8
 # Add ondrej/php PPA
 RUN apt-get install -y software-properties-common
 RUN add-apt-repository -y ppa:ondrej/php
+RUN apt-get update
 
 # PHP Installation
 RUN apt-get remove -y --purge php5 php5-common
