@@ -8,14 +8,19 @@ ENV COMPOSER_HOME /root/composer
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-ENV LANG       en_US.UTF-8
-ENV LC_ALL en_US.UTF-8
-
-RUN locale-gen en_US.UTF-8
-
 # Update the installation
 RUN apt-get update
 RUN apt-get upgrade -y
+
+# Set the Locale
+ENV LANG       en_US.UTF-8
+ENV LC_ALL en_US.UTF-8
+RUN apt-get install -y locales
+RUN locale-gen en_US.UTF-8
+
+# Add ondrej/php PPA
+RUN apt-get install -y software-properties-common
+RUN add-apt-repository -y ppa:ondrej/php
 
 # PHP Installation
 RUN apt-get remove -y --purge php5 php5-common
@@ -40,6 +45,17 @@ RUN apt-get install -y \
 		php-msgpack \
 		php-xdebug \
 		php7.0-gd
+
+RUN apt-get install build-essential php-pear php7.0-dev
+
+# Install other PHP extensions
+RUN apt-get install -y libzookeeper-mt2 libzookeeper-mt-dev
+RUN pecl install zookeeper-0.4.0
+RUN echo "extension=zookeeper.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
+
+RUN apt-get install -y libssl-dev pkg-config
+RUN pecl install mongodb-1.2.9
+RUN echo "extension=mongodb.so" >> `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"`
 
 # Install composer
 VOLUME /root/composer
