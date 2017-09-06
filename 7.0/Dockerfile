@@ -70,6 +70,7 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get install -y nodejs
 
 RUN npm install -g npm@latest
+RUN npm update -g
 
 RUN npm install -g gulp
 RUN npm install -g grunt
