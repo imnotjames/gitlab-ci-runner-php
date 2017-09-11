@@ -65,6 +65,9 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN composer selfupdate
 RUN composer global require hirak/prestissimo --prefer-dist --no-interaction
 
+# Dependency for some nodejs packages?
+RUN apt-get install -y nasm
+
 # NodeJS installation
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get install -y nodejs
