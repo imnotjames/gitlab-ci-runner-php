@@ -72,7 +72,8 @@ RUN apt-get install -y nasm
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get install -y nodejs
 
-RUN npm install -g npm@latest
+# Update npm
+RUN curl -0 -sL http://npmjs.org/install.sh | bash -
 RUN npm update -g
 
 RUN npm install -g gulp
