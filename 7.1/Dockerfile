@@ -65,6 +65,11 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN composer selfupdate
 RUN composer global require hirak/prestissimo --prefer-dist --no-interaction
 
+# mozjpeg-bin requires libpng12
+RUN curl -o /tmp/libpng12.deb http://mirrors.kernel.org/ubuntu/pool/main/libp/libpng/libpng12-0_1.2.54-1ubuntu1_amd64.deb
+RUN dpkg --install /tmp/libpng12.deb
+RUN rm /tmp/libpng12.deb
+
 # Dependency for some nodejs packages?
 RUN apt-get install -y nasm
 
