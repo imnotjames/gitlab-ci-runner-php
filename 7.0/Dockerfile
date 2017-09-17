@@ -76,8 +76,10 @@ RUN apt-get install -y nodejs
 RUN curl -0 -sL http://npmjs.org/install.sh | bash -
 RUN npm update -g
 
+# Install some build packages
 RUN npm install -g gulp
 RUN npm install -g grunt
+RUN npm install -g webpack
 
 # YARN
 RUN curl -o- -L https://yarnpkg.com/install.sh | bash
